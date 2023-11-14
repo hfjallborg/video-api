@@ -26,3 +26,14 @@ class VideoDetailSerializer(ModelSerializer):
     class Meta:
         model = Video
         fields = ['public_id', 'user', 'title', 'description', 'created', 'source',]
+
+
+class VideoUploadSerializer(ModelSerializer):
+    class Meta:
+        model = Video
+        # For now the user is passed in the request, eventually this should be done
+        # with user-specific tokens instead
+        fields = ['title', 'description', 'file', 'user', 'file']
+
+    def create(self, validated_data):
+        return Video.objects.create(**validated_data)
