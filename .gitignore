@@ -1,0 +1,14 @@
+# Virtual environment
+.venv/
+
+# Python data
+__pycache__/
+
+# IDE data
+.idea/
+
+# Development database
+db.sqlite3
+
+# Private
+.env
