@@ -10,5 +10,8 @@ __pycache__/
 # Development database
 db.sqlite3
 
+# Default video upload directory
+uploads/
+
 # Private
 .env
