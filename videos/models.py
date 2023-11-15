@@ -6,9 +6,14 @@ from shortuuidfield import ShortUUIDField
 
 
 class Video(models.Model):
+    class Status(models.TextChoices):
+        PUBLIC = 'PUB', 'Public'
+        PRIVATE = 'PRI', 'Private'
+        DELETED = 'DEL', 'Deleted'
 
     # A non-numeric id will be used for public access
     public_id = ShortUUIDField(editable=False, unique=True)
+    status = models.CharField(max_length=3, choices=Status.choices, default=Status.PRIVATE)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
