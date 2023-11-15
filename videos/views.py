@@ -10,15 +10,14 @@ from rest_framework import status
 
 from .models import Video
 from .serializers import VideoDetailSerializer, VideoListSerializer, VideoUploadSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import VideoStatusPermission
 
 
 class VideoListView(generics.ListCreateAPIView):
-    queryset = Video.objects.all()
+    queryset = Video.objects.all().filter(status=Video.Status.PUBLIC)
     serializer_class = VideoListSerializer
     parser_classes = [MultiPartParser]
 
-    # Authentication and authorization
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -36,11 +35,11 @@ class VideoRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VideoDetailSerializer
     lookup_field = 'public_id'
 
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, VideoStatusPermission]
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, VideoStatusPermission])
 def video_source_view(request, public_id):
     """Video source URL"""
     video = get_object_or_404(Video, public_id=public_id)
