@@ -36,13 +36,19 @@ ALLOWED_HOSTS = env.str('DJANGO_ALLOWED_HOSTS').split(' ')
 # Application definition
 
 INSTALLED_APPS = [
+    # Django standard apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Rest framework
     'rest_framework',
+    'rest_framework.authtoken',
+
+    # Local apps
     'videos.apps.VideosConfig',
 ]
 
@@ -132,3 +138,10 @@ MEDIA_ROOT = BASE_DIR / 'uploads/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
