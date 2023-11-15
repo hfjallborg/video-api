@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
+    # 3rd party libraries
+    'django_cleanup.apps.CleanupConfig',
+
     # Local apps
     'videos.apps.VideosConfig',
 ]
