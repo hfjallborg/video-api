@@ -50,12 +50,14 @@ INSTALLED_APPS = [
 
     # 3rd party libraries
     'django_cleanup.apps.CleanupConfig',
+    'corsheaders',
 
     # Local apps
     'videos.apps.VideosConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -148,3 +150,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+# CORS Headers
+CORS_ALLOWED_ORIGINS = env.str('DJANGO_CORS_ALLOWED_ORIGINS').split(' ')
