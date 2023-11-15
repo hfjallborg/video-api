@@ -25,7 +25,7 @@ class VideoDetailSerializer(ModelSerializer):
     
     class Meta:
         model = Video
-        fields = ['public_id', 'user', 'title', 'description', 'created', 'source',]
+        fields = ['public_id', 'user', 'title', 'description', 'created', 'source', 'file']
 
     def create(self, validated_data):
         video_obj = Video.objects.create(**validated_data)
