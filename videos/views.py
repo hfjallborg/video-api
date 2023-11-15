@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from .models import Video
-from .serializers import VideoDetailSerializer, VideoListSerializer, VideoUploadSerializer
+from .serializers import VideoDetailSerializer, VideoListSerializer
 from .permissions import VideoStatusPermission
 
 
@@ -22,7 +22,7 @@ class VideoListView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         # The MultiPartParser lets us parse the uploaded file
-        serializer = VideoUploadSerializer(data=request.data)
+        serializer = VideoDetailSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
