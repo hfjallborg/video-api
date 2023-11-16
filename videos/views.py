@@ -37,6 +37,13 @@ class VideoRetrieveView(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAuthenticated, VideoStatusPermission]
 
+    def delete(self, request, *args, **kwargs):
+        # Instead of permanently deleting the video, the 'DELETE' request will set 'DEL'-status
+        video = self.get_object()
+        video.status = Video.Status.DELETED
+        video.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, VideoStatusPermission])
