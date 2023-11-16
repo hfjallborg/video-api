@@ -14,11 +14,30 @@ from .permissions import VideoStatusPermission
 
 
 class VideoListView(generics.ListCreateAPIView):
-    queryset = Video.objects.all().filter(status=Video.Status.PUBLIC)
+    """Response contains a list of videos depending on the users role.
+
+    Normal users will get a list of public videos and their own videos (excluding deleted videos). Staff users will get
+    the full list of videos, regardless of status.
+    """
+    queryset = Video.objects.all().filter()
     serializer_class = VideoListSerializer
     parser_classes = [MultiPartParser]
 
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Video.objects.all()
+        else:
+            public_videos = Video.objects.filter(status=Video.Status.PUBLIC)
+            user_videos = Video.objects.filter(user=user).exclude(status=Video.Status.DELETED)
+            return public_videos | user_videos
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         # The MultiPartParser lets us parse the uploaded file
@@ -31,6 +50,7 @@ class VideoListView(generics.ListCreateAPIView):
 
 
 class VideoRetrieveView(generics.RetrieveUpdateDestroyAPIView):
+    """View or change data of the video with the provided public_id."""
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
     lookup_field = 'public_id'
