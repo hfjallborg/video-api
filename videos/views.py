@@ -19,7 +19,7 @@ class VideoListView(generics.ListCreateAPIView):
     Normal users will get a list of public videos and their own videos (excluding deleted videos). Staff users will get
     the full list of videos, regardless of status.
     """
-    queryset = Video.objects.all().filter()
+    queryset = Video.objects.all()
     serializer_class = VideoListSerializer
     parser_classes = [MultiPartParser]
 

@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('videos.urls', namespace='videos'))
+    path('', include('videos.urls', namespace='videos')),
+    path('', include('accounts.urls', namespace='accounts')),
 ]
 
 # Serving media files during development
