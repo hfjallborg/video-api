@@ -93,8 +93,12 @@ WSGI_APPLICATION = 'video_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env.str('DJANGO_POSTGRES_DB'),
+        'USER': env.str('DJANGO_POSTGRES_USER'),
+        'PASSWORD': env.str('DJANGO_POSTGRES_PASSWORD'),
+        'HOST': env.str('DJANGO_POSTGRES_HOST'),
+        'PORT': env.str('DJANGO_POSTGRES_PORT'),
     }
 }
 
