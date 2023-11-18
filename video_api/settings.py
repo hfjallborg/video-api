@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'videos.apps.VideosConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [

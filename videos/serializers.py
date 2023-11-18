@@ -1,15 +1,7 @@
-from django.contrib.auth import get_user_model
-
 from rest_framework.serializers import ModelSerializer, Serializer, CharField
 
 from .models import Video
-
-
-class UserSerializer(ModelSerializer):
-
-    class Meta:
-        model = get_user_model()
-        fields = ['username']
+from accounts.serializers import UserSerializer
 
 
 class VideoListSerializer(ModelSerializer):
