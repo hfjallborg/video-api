@@ -27,11 +27,26 @@ class VideoListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
+
+        query_params = {}
+        if self.request.method == 'GET':
+            # Filter by user(name)
+            if self.request.GET.get('user', None):
+                query_params['user__username'] = self.request.GET['user']
+            if self.request.GET.get('status', None):
+                status_query = self.request.GET['status']
+                # This dict-comp translates the read-friendly url parameter (e.g. 'public') to the status code
+                # (e.g. 'PUB'). There might be a better way to implement this.
+                status_value = {choice[1].lower(): choice[0] for choice in Video.Status.choices}[status_query]
+                query_params['status'] = status_value
+
+        queryset = Video.objects.filter(**query_params)
+
         if user.is_staff:
-            return Video.objects.all()
+            return queryset
         else:
-            public_videos = Video.objects.filter(status=Video.Status.PUBLIC)
-            user_videos = Video.objects.filter(user=user).exclude(status=Video.Status.DELETED)
+            public_videos = queryset.filter(status=Video.Status.PUBLIC)
+            user_videos = queryset.filter(user=user).exclude(status=Video.Status.DELETED)
             return public_videos | user_videos
 
     def get(self, request, *args, **kwargs):
