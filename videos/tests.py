@@ -20,22 +20,18 @@ class VideoTesting(APITestCase):
         cls.client = APIClient()
 
         # First user
-        cls.user1 = User(
+        cls.user1 = User.objects.create_user(
             username="testuser",
             password="testpass123",
         )
-        cls.user1.save()
         cls.token1 = Token.objects.create(user=cls.user1)
-        cls.token1.save()
 
         # Second user
-        cls.user2 = User(
+        cls.user2 = User.objects.create_user(
             username="JohnDoe",
             password="secretpassword1234",
         )
-        cls.user2.save()
         cls.token2 = Token.objects.create(user=cls.user2)
-        cls.token2.save()
 
         # Video objects
         cls.video1 = Video(
