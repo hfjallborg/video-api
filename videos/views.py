@@ -26,21 +26,37 @@ class VideoListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """Generates the list of videos for this view.
+
+        Accepts URL parameters for filtering and sorting videos.
+        """
         user = self.request.user
 
-        query_params = {}
+        filter_params = {}
+        order_param = None
+
         if self.request.method == 'GET':
-            # Filter by user(name)
+
+            # Filtering parameters
             if self.request.GET.get('user', None):
-                query_params['user__username'] = self.request.GET['user']
+                filter_params['user__username'] = self.request.GET['user']
             if self.request.GET.get('status', None):
                 status_query = self.request.GET['status']
                 # This dict-comp translates the read-friendly url parameter (e.g. 'public') to the status code
                 # (e.g. 'PUB'). There might be a better way to implement this.
                 status_value = {choice[1].lower(): choice[0] for choice in Video.Status.choices}[status_query]
-                query_params['status'] = status_value
+                filter_params['status'] = status_value
 
-        queryset = Video.objects.filter(**query_params)
+            # Sorting parameters
+            if self.request.GET.get('sort_by', None):
+                order_param = self.request.GET['sort_by']
+            if self.request.GET.get('order_by', None):
+                if self.request.GET['order_by'] == 'desc':
+                    order_param = f'-{order_param}'
+
+        queryset = Video.objects.filter(**filter_params)
+        if order_param is not None:
+            queryset = queryset.order_by(order_param)
 
         if user.is_staff:
             return queryset
