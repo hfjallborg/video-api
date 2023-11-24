@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # 3rd party libraries
     'django_cleanup.apps.CleanupConfig',
     'corsheaders',
+    'minio_storage',
 
     # Local apps
     'videos.apps.VideosConfig',
@@ -143,8 +144,15 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
-# Media files (video uploads)
-MEDIA_ROOT = BASE_DIR / 'uploads/'
+# Media storae is done using Minio Storage
+DEFAULT_FILE_STORAGE = 'minio_storage.storage.MinioMediaStorage'
+
+MINIO_STORAGE_ENDPOINT = env.str('DJANGO_MINIO_STORAGE_ENDPOINT')
+MINIO_STORAGE_ACCESS_KEY = env.str('DJANGO_MINIO_STORAGE_ACCESS_KEY')
+MINIO_STORAGE_SECRET_KEY = env.str('DJANGO_MINIO_STORAGE_SECRET_KEY')
+MINIO_STORAGE_USE_HTTPS = env.bool('DJANGO_MINIO_STORAGE_USE_HTTPS')
+MINIO_STORAGE_MEDIA_BUCKET_NAME = env.str('DJANGO_MINIO_STORAGE_MEDIA_BUCKET_NAME')
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = env.bool('DJANGO_MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
